@@ -1,4 +1,6 @@
-import MaterialTable from 'material-table'
+import dynamic from 'next/dynamic'
+
+const MaterialTable = dynamic(() => import('material-table'), { ssr: false })
 
 export default function StatsTable({ columns, data, onChange }) {
   const [state, setState] = React.useState({ columns, data });
