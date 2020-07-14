@@ -1,23 +1,23 @@
-import playersService from '../../../lib/services/players'
+import playersService from '../../../../../lib/services/players'
 
 export default (req, res) => {
   if (req.method === 'GET') {
-    getPlayer(req, res)
+    getStats(req, res)
   }
 }
 
-const getPlayer = async (req, res) => {
+const getStats = async (req, res) => {
   try {
     const {
       query: { id },
     } = req
-    const player = await playersService.getPlayer(id)
-    if (player !== null) {
+    const match = await playersService.getStats(id)
+    if (match !== null) {
       res.statusCode = 200
-      res.json(player)
+      res.json(match)
     } else {
       res.statusCode = 404
-      res.json({ message: 'Player not found' })
+      res.json({ message: 'Stats not found' })
     }
   } catch (err) {
     res.statusCode = 500

@@ -25,6 +25,10 @@ const saveMatch = async (req, res) => {
       res.statusCode = 400
       return res.json({ message: 'Field [mapId] is required' })
     }
+    if (!req.body.date) {
+      res.statusCode = 400
+      return res.json({ message: 'Field [date] is required' })
+    }
     if (!req.body.teams) {
       res.statusCode = 400
       return res.json({ message: 'Field [teams] is required' })
@@ -34,7 +38,7 @@ const saveMatch = async (req, res) => {
       return res.json({ message: 'Field [teams] is empty or is invalid' })
     }
 
-    await matchesService.saveMatch({ mapId: req.body.mapId, teams: req.body.teams })
+    await matchesService.saveMatch({ mapId: req.body.mapId, date: req.body.date, teams: req.body.teams })
     res.statusCode = 201
     res.json({ message: 'Match created successfully' })
   } catch (err) {

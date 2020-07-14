@@ -47,6 +47,27 @@ class MatchesRepository {
     }
   }
 
+  async getStats(matchId) {
+    const docClient = new AWS.DynamoDB.DocumentClient()
+
+    const params = {
+      TableName: 'AOETournaments',
+      KeyConditionExpression: 'PK = :pk and begins_with(SK, :playerPrefix)',
+      ExpressionAttributeValues: {
+        ':pk': `${KEYS.MATCH}${matchId}`,
+        ':playerPrefix': KEYS.PLAYER,
+      },
+    }
+
+    try {
+      const response = await docClient.query(params).promise()
+      return response.Items
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
+
   async getPlayerStats(matchId, playerId) {
     const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -68,7 +89,7 @@ class MatchesRepository {
     }
   }
 
-  async saveMatch({ mapId, teams }) {
+  async saveMatch({ mapId, date, teams }) {
     const docClient = new AWS.DynamoDB.DocumentClient()
 
     const matchId = uuid.v4()
@@ -83,6 +104,7 @@ class MatchesRepository {
               Type: TYPES.MATCH,
               MatchId: matchId,
               MapId: mapId,
+              Date: date,
             },
           },
         },
@@ -119,7 +141,7 @@ class MatchesRepository {
         statistics,
         militaryStatistics,
         economyStatistics,
-        techonologyStatistics,
+        technologyStatistics,
         societyStatistics,
       }) => ({
         Put: {
@@ -131,7 +153,7 @@ class MatchesRepository {
             Statistics: statistics,
             MilitaryStatistics: militaryStatistics,
             EconomyStatistics: economyStatistics,
-            TechonologyStatistics: techonologyStatistics,
+            TechnologyStatistics: technologyStatistics,
             SocietyStatistics: societyStatistics,
           },
         },

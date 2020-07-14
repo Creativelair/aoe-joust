@@ -1,16 +1,30 @@
 import { KEYS } from '../config/constants'
 import mapsService from './maps'
 import teamsService from './teams'
+import StatsService from './stats'
 import matchesRepository from '../repositories/matches'
 
-class MatchesService {
+class MatchesService extends StatsService {
   async getMatches() {
     const matches = await matchesRepository.getMatches()
-    return this.mapMatches(matches)
+    const teams = await teamsService.getTeams()
+
+    const mappedMatches = this.mapMatches(matches)
+    const mappedTeams = teams.reduce((acc, team) => ({ ...acc, [team.id]: team }), {})
+
+    return mappedMatches.map(match => ({
+      id: match.id,
+      mapId: match.mapId,
+      date: match.date,
+      teams: match.teams.map(team => mappedTeams[team]),
+    }))
   }
 
   async getMatch(matchId) {
-    const matches = await matchesRepository.getMatch(matchId)
+    const [matches, stats] = await Promise.all([
+      matchesRepository.getMatch(matchId),
+      this.getStats(matchId),
+    ])
     if (!matches.length) {
       return null
     }
@@ -24,28 +38,9 @@ class MatchesService {
     return {
       id: mappedMatch.id,
       map: mapData,
+      date: mappedMatch.date,
       teams: playersData,
-    }
-  }
-
-  async getPlayerStats(matchId, playerId) {
-    const {
-      CivilizationId,
-      Statistics,
-      MilitaryStatistics,
-      EconomyStatistics,
-      TechonologyStatistics,
-      SocietyStatistics,
-    } = await matchesRepository.getPlayerStats(matchId, playerId)
-    return {
-      id: matchId,
-      playerId,
-      civilizationId: CivilizationId,
-      statistics: Statistics,
-      militaryStatistics: MilitaryStatistics,
-      economyStatistics: EconomyStatistics,
-      techonologyStatistics: TechonologyStatistics,
-      societyStatistics: SocietyStatistics,
+      stats: stats.stats,
     }
   }
 
@@ -55,18 +50,32 @@ class MatchesService {
         acc[match.MatchId] = {
           id: match.MatchId,
           mapId: '',
+          date: '',
           teams: [],
         }
       }
 
       if (match.SK.startsWith(KEYS.METADATA)) {
         acc[match.MatchId].mapId = match.MapId
+        acc[match.MatchId].date = match.Date
       } else if (match.SK.startsWith(KEYS.TEAM)) {
         acc[match.MatchId].teams.push(match.TeamId)
       }
 
       return acc
     }, {}))
+  }
+
+  async getStats(matchId) {
+    const stats = await matchesRepository.getStats(matchId)
+    return {
+      stats: this.mapStats(stats),
+    }
+  }
+
+  async getPlayerStats(matchId, playerId) {
+    const playerStats = await matchesRepository.getPlayerStats(matchId, playerId)
+    return this.mapStats([playerStats])[0]
   }
 
   async saveMatch(data) {
