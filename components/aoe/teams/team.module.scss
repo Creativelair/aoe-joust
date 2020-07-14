@@ -1,0 +1,15 @@
+.container {
+    display: inline-block;
+    width: 125px;
+}
+
+.container svg text {
+    fill: #ffffff;
+    text-anchor: middle;
+    transform: "rotate(30 20,40)";
+}
+
+.container svg text>tspan:first-child {
+    font-family: "Fondamento", cursive;
+    font-size: 3rem;
+}
