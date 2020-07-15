@@ -16,6 +16,7 @@ export default function MatchDetail() {
   const { id } = router.query
 
   const dispatch = useDispatch()
+  const { user } = useSelector(({ auth }) => auth)
   const { match, loading, error } = useSelector(({ match }) => match)
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function MatchDetail() {
         <Grid item xs={12}>
           {loading
             ? <CircularProgress className={styles.loading} />
-            : match && <MatchStats match={match} />
+            : match && <MatchStats match={match} editable={user !== null} />
           }
         </Grid>
       </Grid>

@@ -7,7 +7,7 @@ import Stats from '../stats/stats'
 import Match from './match'
 import styles from './matchStats.module.scss'
 
-export default function MatchStats({ match }) {
+export default function MatchStats({ match, editable }) {
   const players = match.teams.flatMap(team => team.players)
 
   const dispatch = useDispatch()
@@ -34,7 +34,7 @@ export default function MatchStats({ match }) {
         {saveStatsError && <Alert elevation={6} variant="filled" severity="error">{saveStatsError}</Alert>}
       </Box>
       <Box className={styles.statsContainer}>
-        <Stats players={players} matchStats={match.stats} onSave={handleSave} />
+        <Stats players={players} matchStats={match.stats} onSave={editable && handleSave} />
       </Box>
     </Box>
   )

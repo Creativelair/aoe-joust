@@ -27,7 +27,7 @@ export default function TeamsList() {
       {loading
         ? <CircularProgress />
         : teams.map(({ id, name }) => (
-          <Grid item xs={3} key={id}>
+          <Grid item md={3} sm={6} xs={12} key={id}>
             <Grid container justify="center">
               <Team name={name} color="secondary" />
             </Grid>
