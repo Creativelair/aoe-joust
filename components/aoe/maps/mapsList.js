@@ -27,7 +27,7 @@ export default function MapsList() {
       {loading
         ? <CircularProgress />
         : maps.map(({ id, name, image }) => (
-          <Grid item xs={3} key={id}>
+          <Grid item md={3} sm={6} xs={12} key={id}>
             <Grid container justify="center">
               <Map name={name} image={image} />
             </Grid>

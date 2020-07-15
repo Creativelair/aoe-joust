@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import Container from '@material-ui/core/Container';
+import Container from '@material-ui/core/Container'
+import TopMenu from './menu/topMenu'
 import Footer from './footer'
 import styles from './layout.module.scss'
 
@@ -13,6 +14,7 @@ export default function Layout({ children }) {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </Head>
+      <TopMenu />
       <main className={styles.content}>
         <Container>
           {children}

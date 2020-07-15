@@ -1,19 +1,17 @@
-import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import CreateIcon from '@material-ui/icons/Create'
 import EventIcon from '@material-ui/icons/Event'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 import Team from '../teams/team'
 import styles from './match.module.scss'
 
-export default function Match({ id, teamA, teamB, date, editable = false }) {
-  const dispatch = useDispatch()
-
+export default function Match({ id, teamA, teamB, date, detailed = false, editable = false }) {
   const router = useRouter()
 
-  const handleCreate = (e) => {
+  const handleDetailsClick = (e) => {
     e.preventDefault()
     router.push('/matches/[id]', `/matches/${id}`)
   }
@@ -30,9 +28,9 @@ export default function Match({ id, teamA, teamB, date, editable = false }) {
           icon={<EventIcon />}
         />
       </Grid>
-      {editable && <Grid item>
-        <IconButton aria-label="create" onClick={handleCreate}>
-          <CreateIcon />
+      {(detailed || editable) && <Grid item>
+        <IconButton aria-label="details" onClick={handleDetailsClick}>
+          {editable ? <CreateIcon /> : <VisibilityIcon />}
         </IconButton>
       </Grid>}
     </Grid>

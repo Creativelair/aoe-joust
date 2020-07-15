@@ -1,0 +1,15 @@
+.container {
+  height: 100%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  padding: 10px 10px 10px 20px;
+}
+
+.fieldContainer, .buttonContainer {
+  margin-top: 10px !important;
+  text-align: center;
+}

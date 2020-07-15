@@ -19,6 +19,7 @@ export default function PlayerStats() {
   const [players, setPlayers] = React.useState([])
 
   const dispatch = useDispatch()
+  const { user } = useSelector(({ auth }) => auth)
   const { loading, error, playerStats, loadingStats, errorStats } = useSelector(({ player }) => player)
   useEffect(() => {
     dispatch(fetchPlayers())
@@ -67,7 +68,7 @@ export default function PlayerStats() {
                       <PlayerPicker labelId="player" onChange={handleChange} />
                     </FormControl>
                   </Grid>
-                  <Grid item xs={2} className={styles.buttonContainer}>
+                  {user && <Grid item xs={2} className={styles.buttonContainer}>
                     <Button
                       variant="contained"
                       color="primary"
@@ -78,7 +79,7 @@ export default function PlayerStats() {
                       onClick={handleExport}>
                       Export
                     </Button>
-                  </Grid>
+                  </Grid>}
                 </>
               )}
           </Grid>

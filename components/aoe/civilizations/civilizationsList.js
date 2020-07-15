@@ -27,7 +27,7 @@ export default function CivilizationsList() {
       {loading
         ? <CircularProgress />
         : civilizations.map(({ id, name, image }) => (
-          <Grid item xs={2} key={id}>
+          <Grid item md={2} sm={3} xs={6} key={id}>
             <Grid container justify="center">
               <Civilization name={name} image={image} />
             </Grid>
