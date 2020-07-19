@@ -22,6 +22,7 @@ import PlayersCivilizations from '../civilizations/playersCivilizations'
 
 export default function Stats({ players, matchStats, onSave }) {
   const [value, setValue] = React.useState(0)
+  const [currentStats, setCurrentStats] = React.useState([...matchStats])
   const [stats, setStats] = React.useState(matchStats.reduce((acc, ms) => ({
     ...acc,
     [ms.playerId]: ms,
@@ -31,18 +32,21 @@ export default function Stats({ players, matchStats, onSave }) {
     setValue(newValue);
   }
 
-  const handleStatsChange = (category, { playerId, player, ...newStats }) => {
-    setStats({
-      ...stats,
+  const handleStatsChange = (category, playerStats) => {
+    const receivedStats = playerStats.length ? playerStats : [playerStats]
+    const mergedStats = receivedStats.reduce((acc, { playerId, player, ...newStats }) => ({
+      ...acc,
       [playerId]: {
-        ...(stats[playerId] || {}),
+        ...(acc[playerId] || {}),
         [category]: newStats,
       }
-    })
+    }), {...stats})
+    setStats(mergedStats)
+    setCurrentStats(Object.keys(mergedStats).map(playerId => ({ ...mergedStats[playerId], playerId })))
   }
 
   const handleCivsChange = (civilizations) => {
-    setStats({
+    const mergedStats = {
       ...stats,
       ...Object.keys(civilizations).reduce((acc, playerId) => ({
         ...acc,
@@ -51,7 +55,9 @@ export default function Stats({ players, matchStats, onSave }) {
           civilizationId: civilizations[playerId],
         },
       }), {})
-    })
+    }
+    setStats(mergedStats)
+    setCurrentStats(Object.keys(mergedStats).map(playerId => ({ ...mergedStats[playerId], playerId })))
   }
 
   const handleSaveClick = (e) => {
@@ -92,22 +98,22 @@ export default function Stats({ players, matchStats, onSave }) {
       </AppBar>
       <Box>
         <TabPanel value={value} index={0}>
-          <PlayersCivilizations players={players} matchStats={matchStats} onChange={onSave ? handleCivsChange : null} />
+          <PlayersCivilizations players={players} matchStats={currentStats} onChange={onSave ? handleCivsChange : null} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <GeneralStats players={players} matchStats={matchStats} onChange={onSave ? data => handleStatsChange('statistics', data) : null} />
+          <GeneralStats players={players} matchStats={currentStats} onChange={onSave ? data => handleStatsChange('statistics', data) : null} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <MilitaryStats players={players} matchStats={matchStats} onChange={onSave ? data => handleStatsChange('militaryStatistics', data) : null} />
+          <MilitaryStats players={players} matchStats={currentStats} onChange={onSave ? data => handleStatsChange('militaryStatistics', data) : null} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <EconomyStats players={players} matchStats={matchStats} onChange={onSave ? data => handleStatsChange('economyStatistics', data) : null} />
+          <EconomyStats players={players} matchStats={currentStats} onChange={onSave ? data => handleStatsChange('economyStatistics', data) : null} />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <TechonologyStats players={players} matchStats={matchStats} onChange={onSave ? data => handleStatsChange('technologyStatistics', data) : null} />
+          <TechonologyStats players={players} matchStats={currentStats} onChange={onSave ? data => handleStatsChange('technologyStatistics', data) : null} />
         </TabPanel>
         <TabPanel value={value} index={5}>
-          <SocietyStats players={players} matchStats={matchStats} onChange={onSave ? data => handleStatsChange('societyStatistics', data) : null} />
+          <SocietyStats players={players} matchStats={currentStats} onChange={onSave ? data => handleStatsChange('societyStatistics', data) : null} />
         </TabPanel>
       </Box>
       {onSave && <Fab color="primary" aria-label="save" className={styles.mainButton} onClick={handleSaveClick} disabled={!canSaveStats()}>
