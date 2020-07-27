@@ -1,0 +1,23 @@
+.progressContainer {
+  display: grid;
+  align-items: center;
+}
+
+.inputContainer {
+  padding-left: 10px;
+}
+
+.inputContainer,
+.inputContainer > div,
+.inputContainer > div > label,
+.inputContainer > div > label > span {
+  width: 100%;
+}
+
+.input {
+  display: none;
+}
+
+.errorContainer {
+  padding: 0 16px !important;
+}

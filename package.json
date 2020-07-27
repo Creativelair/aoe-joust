@@ -34,6 +34,7 @@
     "redux-thunk": "^2.3.0",
     "sass": "^1.26.9",
     "simple-statistics": "^7.1.0",
+    "tesseract.js": "^2.1.1",
     "uuid": "^8.2.0"
   },
   "devDependencies": {
