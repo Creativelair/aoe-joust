@@ -19,7 +19,7 @@
     "aws-sdk": "^2.709.0",
     "date-fns": "^2.14.0",
     "file-saver": "^2.0.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "material-table": "^1.64.0",
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
