@@ -21,7 +21,7 @@
     "file-saver": "^2.0.2",
     "lodash": "^4.17.19",
     "material-table": "^1.64.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "moment-duration-format": "^2.3.2",
     "next": "9.4.4",
     "next-redux-wrapper": "^6.0.2",
